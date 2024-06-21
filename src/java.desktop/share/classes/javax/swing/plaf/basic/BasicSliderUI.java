@@ -150,8 +150,11 @@ public class BasicSliderUI extends SliderUI{
 
     /**
      * Constructs a {@code BasicSliderUI}.
+     * @deprecated This constructor will be removed in future release
+     *             as there is already a constructor with JSlider parameter.
      */
-    public BasicSliderUI() {}
+     @Deprecated(since = "23", forRemoval = true)
+     public BasicSliderUI() {}
 
     /**
      * Returns the shadow color.
