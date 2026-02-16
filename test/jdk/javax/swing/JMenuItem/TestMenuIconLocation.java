@@ -48,7 +48,6 @@ import javax.swing.UIManager;
 
 public class TestMenuIconLocation {
 
-
      private static final String INSTRUCTIONS = """
         A frame will be shown with a menu "A Menu".
         Click on the menu.
@@ -57,7 +56,7 @@ public class TestMenuIconLocation {
         Red square icon location should be close
         to the left edge of JMenu and sufficient gap
         between icon and text.
- 
+
         If the JMenuItem icon location is such,
         press Pass else press Fail.""";
 
@@ -118,5 +117,4 @@ public class TestMenuIconLocation {
 
         return menuBar;
     }
-
-} 
+}
