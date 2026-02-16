@@ -92,7 +92,7 @@ public class TestJOptionPaneFocusTraversal {
                     frame.dispose();
                 }
             });
-        } 
+        }
     }
 
     private static class DiagChangeListener implements java.beans.PropertyChangeListener {
