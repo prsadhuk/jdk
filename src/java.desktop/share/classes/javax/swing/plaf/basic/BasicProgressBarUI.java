@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997, 2026, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -34,6 +34,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.PrintGraphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,6 +52,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.ProgressBarUI;
+import java.awt.print.PrinterGraphics;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import sun.swing.DefaultLookup;
@@ -710,7 +713,8 @@ public class BasicProgressBarUI extends ProgressBarUI {
      * @since 1.4
      */
     protected void paintDeterminate(Graphics g, JComponent c) {
-        if (!(g instanceof Graphics2D)) {
+        if (!(g instanceof Graphics2D)
+                && !(g instanceof PrinterGraphics || g instanceof PrintGraphics)) {
             return;
         }
 
@@ -727,25 +731,35 @@ public class BasicProgressBarUI extends ProgressBarUI {
         // amount of progress to draw
         int amountFull = getAmountFull(b, barRectWidth, barRectHeight);
 
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics g2 = null;
+        Graphics2D g2d = null;
+        if (g instanceof Graphics2D) {
+            g2 = g2d = (Graphics2D) g;
+        } else {
+            g2 = g;
+        }
         g2.setColor(progressBar.getForeground());
 
         if (progressBar.getOrientation() == JProgressBar.HORIZONTAL) {
             // draw the cells
-            if (cellSpacing == 0 && amountFull > 0) {
-                // draw one big Rect because there is no space between cells
-                g2.setStroke(new BasicStroke((float)barRectHeight,
-                        BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
-            } else {
-                // draw each individual cell
-                g2.setStroke(new BasicStroke((float)barRectHeight,
-                        BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                        0.f, new float[] { cellLength, cellSpacing }, 0.f));
+            if (g2 instanceof Graphics2D) {
+                if (cellSpacing == 0 && amountFull > 0) {
+                    // draw one big Rect because there is no space between cells
+                    g2d.setStroke(new BasicStroke((float) barRectHeight,
+                            BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
+                } else {
+                    // draw each individual cell
+                    g2d.setStroke(new BasicStroke((float) barRectHeight,
+                            BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                            0.f, new float[]{cellLength, cellSpacing}, 0.f));
+                }
             }
 
             if (BasicGraphicsUtils.isLeftToRight(c)) {
-                g2.drawLine(b.left, (barRectHeight/2) + b.top,
-                        amountFull + b.left, (barRectHeight/2) + b.top);
+
+                    g2.drawLine(b.left, (barRectHeight / 2) + b.top,
+                            amountFull + b.left, (barRectHeight / 2) + b.top);
+
             } else {
                 g2.drawLine((barRectWidth + b.left),
                         (barRectHeight/2) + b.top,
@@ -755,15 +769,17 @@ public class BasicProgressBarUI extends ProgressBarUI {
 
         } else { // VERTICAL
             // draw the cells
-            if (cellSpacing == 0 && amountFull > 0) {
-                // draw one big Rect because there is no space between cells
-                g2.setStroke(new BasicStroke((float)barRectWidth,
-                        BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
-            } else {
-                // draw each individual cell
-                g2.setStroke(new BasicStroke((float)barRectWidth,
-                        BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                        0f, new float[] { cellLength, cellSpacing }, 0f));
+            if (g2 instanceof Graphics2D) {
+                if (cellSpacing == 0 && amountFull > 0) {
+                    // draw one big Rect because there is no space between cells
+                    g2d.setStroke(new BasicStroke((float) barRectWidth,
+                            BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
+                } else {
+                    // draw each individual cell
+                    g2d.setStroke(new BasicStroke((float) barRectWidth,
+                            BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                            0f, new float[]{cellLength, cellSpacing}, 0f));
+                }
             }
 
             g2.drawLine(barRectWidth/2 + b.left,
@@ -838,11 +854,18 @@ public class BasicProgressBarUI extends ProgressBarUI {
      */
     private void paintString(Graphics g, int x, int y, int width, int height,
                              int fillStart, int amountFull, Insets b) {
-        if (!(g instanceof Graphics2D)) {
+        if (!(g instanceof Graphics2D)
+                && !(g instanceof PrinterGraphics || g instanceof PrintGraphics)) {
             return;
         }
 
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics g2 = null;
+        Graphics2D g2d = null;
+        if (g instanceof Graphics2D) {
+            g2 = g2d = (Graphics2D) g;
+        } else {
+            g2 = g;
+        }
         String progressString = progressBar.getString();
         g2.setFont(progressBar.getFont());
         Point renderLocation = getStringPlacement(g2, progressString,
@@ -853,10 +876,12 @@ public class BasicProgressBarUI extends ProgressBarUI {
             g2.setColor(getSelectionBackground());
             SwingUtilities2.drawString(progressBar, g2, progressString,
                                        renderLocation.x, renderLocation.y);
-            g2.setColor(getSelectionForeground());
-            g2.clipRect(fillStart, y, amountFull, height);
-            SwingUtilities2.drawString(progressBar, g2, progressString,
-                                       renderLocation.x, renderLocation.y);
+            if (g2 instanceof Graphics2D) {
+                g2.setColor(getSelectionForeground());
+                g2.clipRect(fillStart, y, amountFull, height);
+                SwingUtilities2.drawString(progressBar, g2, progressString,
+                        renderLocation.x, renderLocation.y);
+            }
         } else { // VERTICAL
             g2.setColor(getSelectionBackground());
             AffineTransform rotate =
