@@ -53,7 +53,7 @@ public class PrintProgressBarTest extends JFrame {
         This test shows a frame with a progressbar and a "Print" button.
             1. Click the 'Print' button on the frame
             2. Select a printer/pdf-printer in the print dialog and proceed
-               If the progressbar is printed along with progress string 
+               If the progressbar is printed along with progress string
                test PASSED else FAILED.
         """;
 
