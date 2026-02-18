@@ -713,8 +713,8 @@ public class BasicProgressBarUI extends ProgressBarUI {
      * @since 1.4
      */
     protected void paintDeterminate(Graphics g, JComponent c) {
-        if (!(g instanceof Graphics2D)
-                && !(g instanceof PrinterGraphics || g instanceof PrintGraphics)) {
+        boolean isPrinting = SwingUtilities2.isPrinting(g);
+        if (!(g instanceof Graphics2D) && !isPrinting) {
             return;
         }
 
@@ -853,8 +853,8 @@ public class BasicProgressBarUI extends ProgressBarUI {
      */
     private void paintString(Graphics g, int x, int y, int width, int height,
                              int fillStart, int amountFull, Insets b) {
-        if (!(g instanceof Graphics2D)
-                && !(g instanceof PrinterGraphics || g instanceof PrintGraphics)) {
+        boolean isPrinting = SwingUtilities2.isPrinting(g);
+        if (!(g instanceof Graphics2D) && !isPrinting) {
             return;
         }
 
