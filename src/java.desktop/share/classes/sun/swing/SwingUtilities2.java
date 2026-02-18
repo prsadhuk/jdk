@@ -500,7 +500,6 @@ public class SwingUtilities2 {
         }
         if (isPrinting(g)) {
             Graphics2D g2d = getGraphics2D(g);
-            System.out.println("g2d " + g2d);
             if (g2d != null) {
                 /* The printed text must scale linearly with the UI.
                  * Calculate the width on screen, obtain a TextLayout with

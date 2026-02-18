@@ -756,9 +756,8 @@ public class BasicProgressBarUI extends ProgressBarUI {
             }
 
             if (BasicGraphicsUtils.isLeftToRight(c)) {
-                    g2.drawLine(b.left, (barRectHeight / 2) + b.top,
-                            amountFull + b.left, (barRectHeight / 2) + b.top);
-
+                g2.drawLine(b.left, (barRectHeight/2) + b.top,
+                            amountFull + b.left, (barRectHeight/2) + b.top);
             } else {
                 g2.drawLine((barRectWidth + b.left),
                         (barRectHeight/2) + b.top,
