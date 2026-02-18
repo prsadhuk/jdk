@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2000, 2026, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -436,7 +436,7 @@ class MetalTitlePane extends JComponent {
      * for manipulating the Frame.
      */
     private JMenu createMenu() {
-        JMenu menu = new JMenu("");
+        JMenu menu = new JMenu(" ");
         if (getWindowDecorationStyle() == JRootPane.FRAME) {
             addMenuItems(menu);
         }
