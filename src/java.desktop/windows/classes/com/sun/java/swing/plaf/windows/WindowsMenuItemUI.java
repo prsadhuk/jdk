@@ -202,9 +202,7 @@ public final class WindowsMenuItemUI extends BasicMenuItemUI {
         SwingUtilities3.paintCheckIcon(g, lh, lr, holdc, foreground);
         SwingUtilities3.paintIcon(g, lh, lr, holdc);
 
-        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()
-            && (menuItem instanceof JRadioButtonMenuItem
-                || menuItem instanceof JCheckBoxMenuItem)) {
+        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()) {
             Rectangle rect = lr.getTextRect();
             if (menuItem.getComponentOrientation().isLeftToRight()) {
                 if (menuItem.getHorizontalTextPosition() != SwingConstants.LEADING
@@ -230,9 +228,7 @@ public final class WindowsMenuItemUI extends BasicMenuItemUI {
                           lr.getTextRect(), lh.getText());
             }
         }
-        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()
-            && (menuItem instanceof JRadioButtonMenuItem
-                || menuItem instanceof JCheckBoxMenuItem)) {
+        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()) {
             Rectangle rect = lr.getAccRect();
             if (menuItem.getComponentOrientation().isLeftToRight()) {
                 rect.x += lh.getAfterCheckIconGap();
@@ -244,9 +240,7 @@ public final class WindowsMenuItemUI extends BasicMenuItemUI {
         SwingUtilities3.paintAccText(g, lh, lr, disabledForeground,
                                      acceleratorSelectionForeground,
                                      acceleratorForeground);
-        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()
-            && (menuItem instanceof JRadioButtonMenuItem
-                || menuItem instanceof JCheckBoxMenuItem)) {
+        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()) {
             Rectangle rect = lr.getArrowRect();
             if (menuItem.getComponentOrientation().isLeftToRight()) {
                 rect.x += lh.getAfterCheckIconGap();
