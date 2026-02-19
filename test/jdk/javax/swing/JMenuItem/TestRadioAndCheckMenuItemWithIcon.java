@@ -23,7 +23,7 @@
 
 /*
  * @test
- * @bug 8348760
+ * @bug 8348760 8370945
  * @summary Verify if RadioButtonMenuItem bullet and
  *          JCheckboxMenuItem checkmark is shown if
  *          JRadioButtonMenuItem and JCheckboxMenuItem
