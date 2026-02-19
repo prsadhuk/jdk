@@ -51,7 +51,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.ProgressBarUI;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import sun.swing.DefaultLookup;
