@@ -889,41 +889,39 @@ public class BasicProgressBarUI extends ProgressBarUI {
             return;
         }
 
-        Graphics g2 = null;
+        Graphics g2d = null;
         if (g instanceof Graphics2D) {
-            g2 = (Graphics2D) g;
-        } else {
-            g2 = g;
+            g2d = (Graphics2D) g;
         }
         String progressString = progressBar.getString();
-        g2.setFont(progressBar.getFont());
-        Point renderLocation = getStringPlacement(g2, progressString,
+        g.setFont(progressBar.getFont());
+        Point renderLocation = getStringPlacement(g, progressString,
                                                   x, y, width, height);
-        Rectangle oldClip = g2.getClipBounds();
+        Rectangle oldClip = g.getClipBounds();
 
         if (progressBar.getOrientation() == JProgressBar.HORIZONTAL) {
-            g2.setColor(getSelectionBackground());
-            SwingUtilities2.drawString(progressBar, g2, progressString,
+            g.setColor(getSelectionBackground());
+            SwingUtilities2.drawString(progressBar, g, progressString,
                                        renderLocation.x, renderLocation.y);
-            g2.setColor(getSelectionForeground());
-            g2.clipRect(fillStart, y, amountFull, height);
-            SwingUtilities2.drawString(progressBar, g2, progressString,
+            g.setColor(getSelectionForeground());
+            g.clipRect(fillStart, y, amountFull, height);
+            SwingUtilities2.drawString(progressBar, g, progressString,
                     renderLocation.x, renderLocation.y);
         } else { // VERTICAL
-            g2.setColor(getSelectionBackground());
+            g.setColor(getSelectionBackground());
             AffineTransform rotate =
                     AffineTransform.getRotateInstance(Math.PI/2);
-            g2.setFont(progressBar.getFont().deriveFont(rotate));
-            renderLocation = getStringPlacement(g2, progressString,
+            g.setFont(progressBar.getFont().deriveFont(rotate));
+            renderLocation = getStringPlacement(g, progressString,
                                                   x, y, width, height);
-            SwingUtilities2.drawString(progressBar, g2, progressString,
+            SwingUtilities2.drawString(progressBar, g, progressString,
                                        renderLocation.x, renderLocation.y);
-            g2.setColor(getSelectionForeground());
-            g2.clipRect(x, fillStart, width, amountFull);
-            SwingUtilities2.drawString(progressBar, g2, progressString,
+            g.setColor(getSelectionForeground());
+            g.clipRect(x, fillStart, width, amountFull);
+            SwingUtilities2.drawString(progressBar, g, progressString,
                                        renderLocation.x, renderLocation.y);
         }
-        g2.setClip(oldClip);
+        g.setClip(oldClip);
     }
 
 
