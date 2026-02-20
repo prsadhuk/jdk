@@ -35,6 +35,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -44,16 +45,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Properties;
 
-public class PrintProgressBarTest extends JFrame {
-    static JFrame TestFrame;
-    static JPanel MPanel;
-    static JProgressBar bar;
+public class PrintProgressBarTest {
 
     private static final String INSTRUCTIONS = """
-        This test shows a frame with a progressbar and a "Print" button.
+        This test shows a frame with a horizontal and a vertical progressbar
+        and a "Print" button.
             1. Click the 'Print' button on the frame
             2. Select a printer/pdf-printer in the print dialog and proceed
-               If the progressbar is printed along with progress string
+               If the progressbars are printed along with progress string
                test PASSED else FAILED.
         """;
 
@@ -68,11 +67,16 @@ public class PrintProgressBarTest extends JFrame {
 
     private static JFrame createTestUI() {
         JPanel panel = new JPanel(new FlowLayout());
-        bar = new JProgressBar();
-        bar.setOpaque(true);
-        bar.setStringPainted(true);
-        bar.setValue(50);
-        panel.add("Center", bar);
+        JProgressBar hbar = new JProgressBar(SwingConstants.HORIZONTAL);
+        hbar.setOpaque(true);
+        hbar.setStringPainted(true);
+        hbar.setValue(50);
+        JProgressBar vbar = new JProgressBar(SwingConstants.VERTICAL);
+        vbar.setOpaque(true);
+        vbar.setStringPainted(true);
+        vbar.setValue(50);
+        panel.add("Center", hbar);
+        panel.add("Center", vbar);
 
         JFrame frame = new JFrame("Print Progressbar");
         frame.setContentPane(panel);
@@ -96,7 +100,7 @@ public class PrintProgressBarTest extends JFrame {
             }
         });
 
-        frame.setSize(200, 150);
+        frame.setSize(200, 300);
         frame.add(b);
         return frame;
     }
