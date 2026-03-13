@@ -986,10 +986,10 @@ public class JInternalFrame extends JComponent implements
     @BeanProperty(description
             = "Indicates whether this internal frame is maximized.")
     public void setMaximum(boolean b) throws PropertyVetoException {
-        if (!b) {
-            normalBounds = null;
-        }
         if (isMaximum == b) {
+            if (!b) {
+                normalBounds = null;
+            }
             return;
         }
 
@@ -1001,6 +1001,9 @@ public class JInternalFrame extends JComponent implements
            get it wrong... See, for example, getNormalBounds() */
         isMaximum = b;
         firePropertyChange(IS_MAXIMUM_PROPERTY, oldValue, newValue);
+        if (!b) {
+            normalBounds = null;
+        }
     }
 
     /**

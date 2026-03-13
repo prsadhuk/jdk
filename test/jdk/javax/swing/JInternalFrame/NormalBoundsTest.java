@@ -122,9 +122,9 @@ public class NormalBoundsTest {
     }
 
     private static void drag(Robot r, Point startPt, Point endPt, int button) {
-        if (!(button == InputEvent.BUTTON1_DOWN_MASK
-                || button == InputEvent.BUTTON2_DOWN_MASK
-                || button == InputEvent.BUTTON3_DOWN_MASK)) {
+        if (!(button == InputEvent.BUTTON1_MASK
+                || button == InputEvent.BUTTON2_MASK
+                || button == InputEvent.BUTTON3_MASK)) {
             throw new IllegalArgumentException("invalid mouse button");
         }
 
@@ -186,7 +186,7 @@ public class NormalBoundsTest {
                 drag(robot,
                         new Point((int) loc.x + 80, (int) loc.y + 12),
                         new Point((int) loc.x + 100, (int) loc.y + 40),
-                        InputEvent.BUTTON1_DOWN_MASK);
+                        InputEvent.BUTTON1_MASK);
             }
         });
         robot.waitForIdle();
@@ -195,7 +195,6 @@ public class NormalBoundsTest {
             @Override
             public void run() {
                 bounds = internalFrame.getBounds();
-
                 if (!internalFrame.getNormalBounds().equals(bounds)) {
                     mainFrame.dispose();
                     throw new RuntimeException("Invalid NormalBounds");
@@ -266,11 +265,9 @@ public class NormalBoundsTest {
         SwingUtilities.invokeAndWait(new Runnable() {
             @Override
             public void run() {
-                if (!internalFrame.getNormalBounds()
-                    .equals(internalFrame.getBounds())) {
+                if (!internalFrame.getBounds().equals(bounds)) {
                     mainFrame.dispose();
-                    throw new RuntimeException("NormalBounds not equal " +
-                                    " to getBounds in non-maximized state");
+                    throw new RuntimeException("Regression Test Failed");
                 }
             }
         });
@@ -285,7 +282,6 @@ public class NormalBoundsTest {
                 = UIManager.getInstalledLookAndFeels();
         for (UIManager.LookAndFeelInfo lookAndFeelItem : lookAndFeelArray) {
             String lookAndFeelString = lookAndFeelItem.getClassName();
-            System.out.println("Testing " + lookAndFeelString);
             if (tryLookAndFeel(lookAndFeelString)) {
                 // create UI
                 SwingUtilities.invokeAndWait(new Runnable() {
