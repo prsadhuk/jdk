@@ -48,6 +48,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.UIResource;
 
+import com.sun.java.swing.SwingUtilities3;
 import sun.swing.MenuItemCheckIconFactory;
 import sun.swing.SwingUtilities2;
 
@@ -913,7 +914,11 @@ public final class WindowsIconFactory implements Serializable
                                 }
                             } else {
                                 if (icon == null) {
-                                    skin.paintSkin(g, x + 4 * OFFSET, y + OFFSET, state);
+                                    if (SwingUtilities3.isCheckBulletAndIconPresent()) {
+                                        skin.paintSkin(g, x + 4 * OFFSET, y + OFFSET, state);
+                                    } else {
+                                        skin.paintSkin(g, x + OFFSET, y + OFFSET, state);
+                                    }
                                 } else {
                                     int ycoord = (icon.getIconHeight() <= 16)
                                                   ? y + OFFSET
@@ -951,7 +956,7 @@ public final class WindowsIconFactory implements Serializable
                 }
                 if (icon != null) {
                     if (type == JCheckBoxMenuItem.class
-                            || type == JRadioButtonMenuItem.class) {
+                            || type == JRadioButtonMenuItem.class || SwingUtilities3.isCheckBulletAndIconPresent()) {
                         if (WindowsGraphicsUtils.isLeftToRight(c)) {
                             icon.paintIcon(c, g,
                                     x + VistaMenuItemCheckIconFactory.getIconWidth(),

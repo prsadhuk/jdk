@@ -26,6 +26,8 @@
 package com.sun.java.swing.plaf.windows;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -38,6 +40,8 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
@@ -160,6 +164,28 @@ public class WindowsMenuItemUI extends BasicMenuItemUI {
                 foreground, defaultTextIconGap);
     }
 
+    @Override
+    protected Dimension getPreferredMenuItemSize(JComponent c,
+                                                 Icon checkIcon, Icon arrowIcon, int defaultTextIconGap) {
+        Dimension size = super.getPreferredMenuItemSize(
+                c, checkIcon, arrowIcon, defaultTextIconGap);
+
+        if (c instanceof JRadioButtonMenuItem || c instanceof JCheckBoxMenuItem || c instanceof JMenuItem) {
+            if (SwingUtilities3.isCheckBulletAndIconPresent()) {
+                int afterCheckIconGap = 0;
+                Object afterCheckIconGapObject = UIManager.get(getPropertyPrefix() + ".afterCheckIconGap");
+                if (afterCheckIconGapObject instanceof Integer) {
+                    afterCheckIconGap = (Integer) afterCheckIconGapObject;
+                }
+                int gap = 2 * afterCheckIconGap;
+                SwingUtilities3.setGap(gap);
+                size.width += gap;
+            }
+        }
+
+        return size;
+    }
+
     static void paintMenuItem(WindowsMenuItemUIAccessor accessor, Graphics g,
                               JComponent c,
                               Icon checkIcon, Icon arrowIcon,
@@ -194,28 +220,18 @@ public class WindowsMenuItemUI extends BasicMenuItemUI {
                 mi.getComponentOrientation().isLeftToRight(), mi.getFont(),
                 acceleratorFont, MenuItemLayoutHelper.useCheckAndArrow(menuItem),
                 prefix);
+        System.out.println("paintMenuItem mi " + mi + " isCheckBulletAndIconPresent " + SwingUtilities3.isCheckBulletAndIconPresent());
+        if (mi instanceof JRadioButtonMenuItem || mi instanceof JCheckBoxMenuItem || mi instanceof JMenuItem) {
+            if (SwingUtilities3.isCheckBulletAndIconPresent()) {
+                 lh.allocateIconTextGap(SwingUtilities3.getGap());
+            }
+        }
         MenuItemLayoutHelper.LayoutResult lr = lh.layoutMenuItem();
 
         paintBackground(accessor, g, mi, background);
         SwingUtilities3.paintCheckIcon(g, lh, lr, holdc, foreground);
         SwingUtilities3.paintIcon(g, lh, lr, holdc);
 
-        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()) {
-            Rectangle rect = lr.getTextRect();
-            if (menuItem.getComponentOrientation().isLeftToRight()) {
-                if (menuItem.getHorizontalTextPosition() != SwingConstants.LEADING
-                    && menuItem.getHorizontalTextPosition() != SwingConstants.LEFT) {
-                    rect.x += lh.getAfterCheckIconGap();
-                }
-            } else {
-                if (menuItem.getHorizontalTextPosition() != SwingConstants.LEADING
-                    && menuItem.getHorizontalTextPosition() != SwingConstants.RIGHT) {
-                    rect.x -= lh.getAfterCheckIconGap();
-                }
-            }
-
-            lr.setTextRect(rect);
-        }
         if (!lh.getText().isEmpty()) {
             if (lh.getHtmlView() != null) {
                 // Text is HTML
@@ -226,27 +242,9 @@ public class WindowsMenuItemUI extends BasicMenuItemUI {
                           lr.getTextRect(), lh.getText());
             }
         }
-        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()) {
-            Rectangle rect = lr.getAccRect();
-            if (menuItem.getComponentOrientation().isLeftToRight()) {
-                rect.x += lh.getAfterCheckIconGap();
-            } else {
-                rect.x -= lh.getAfterCheckIconGap();
-            }
-            lr.setAccRect(rect);
-        }
         SwingUtilities3.paintAccText(g, lh, lr, disabledForeground,
                                      acceleratorSelectionForeground,
                                      acceleratorForeground);
-        if (lh.getCheckIcon() != null && lh.useCheckAndArrow()) {
-            Rectangle rect = lr.getArrowRect();
-            if (menuItem.getComponentOrientation().isLeftToRight()) {
-                rect.x += lh.getAfterCheckIconGap();
-            } else {
-                rect.x -= lh.getAfterCheckIconGap();
-            }
-            lr.setArrowRect(rect);
-        }
         SwingUtilities3.paintArrowIcon(g, lh, lr, foreground);
 
         // Restore original graphics font and color

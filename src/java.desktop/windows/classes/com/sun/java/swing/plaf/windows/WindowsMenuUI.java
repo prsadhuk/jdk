@@ -26,6 +26,7 @@
 package com.sun.java.swing.plaf.windows;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -37,6 +38,8 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.MenuElement;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -44,6 +47,7 @@ import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuUI;
 
+import com.sun.java.swing.SwingUtilities3;
 import com.sun.java.swing.plaf.windows.TMSchema.Part;
 import com.sun.java.swing.plaf.windows.TMSchema.State;
 
@@ -131,6 +135,42 @@ public class WindowsMenuUI extends BasicMenuUI {
         hotTrackingOn = (obj instanceof Boolean) ? (Boolean)obj : true;
     }
 
+    private static void scanMenuForCheckBulletAndIcon(Component c) {
+        if (c instanceof JMenu menu) {
+            Component[] children = menu.getMenuComponents();
+
+            for (int i = 0; i < children.length; i++) {
+                scanMenuForCheckBulletAndIcon(children[i]);
+            }
+        }
+
+        if (c instanceof JRadioButtonMenuItem item) {
+            if (item.getIcon() != null) {
+                SwingUtilities3.setCheckBulletAndIconInMenu(true);
+            }
+            SwingUtilities3.setCheckBulletInMenu(true);
+            return;
+        }
+
+        if (c instanceof JCheckBoxMenuItem item) {
+            if (item.getIcon() != null) {
+                SwingUtilities3.setCheckBulletAndIconInMenu(true);
+            }
+            SwingUtilities3.setCheckBulletInMenu(true);
+            return;
+        }
+
+//        if (c instanceof JMenuItem) {
+//            JMenuItem item = (JMenuItem) c;
+//
+//            if (item.getIcon() != null && SwingUtilities3.isCheckBulletPresent()) {
+//                SwingUtilities3.setCheckBulletAndIconInMenu(true);
+//            }
+//            return;
+//        }
+    }
+
+
     @Override
     protected void paintMenuItem(Graphics g, JComponent c,
                                  Icon checkIcon, Icon arrowIcon,
@@ -138,6 +178,9 @@ public class WindowsMenuUI extends BasicMenuUI {
                                  int defaultTextIconGap) {
         assert c == menuItem : "menuItem passed as 'c' must be the same";
         if (WindowsMenuItemUI.isVistaPainting()) {
+            if (c instanceof JMenu menu && menu.isTopLevelMenu()) {
+                scanMenuForCheckBulletAndIcon((JMenu)c);
+            }
             WindowsMenuItemUI.paintMenuItem(accessor, g, c,
                                             checkIcon, arrowIcon,
                                             background, foreground,

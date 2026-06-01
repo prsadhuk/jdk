@@ -76,9 +76,8 @@ public class TestRadioAndCheckMenuItemWithIcon {
         a checkmark is shown alongside the imageicon.
 
         Also, verify the JMenuItem "MenuItem2" red square imageicon location.
-        Red square icon location should be close to the left edge of JMenu
-        and should be in same column as checkmark and radiobullet
-        and text of all menuitems should be vertically aligned.
+        Red square icon location should be vertically aligned to other icons
+        in the menu and also text of all menuitems should be vertically aligned.
 
         If bullet and checkmark is shown,
         and "MenuItem2" imageicon location is as described, test passes else fails.""";
