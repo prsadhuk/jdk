@@ -38,8 +38,6 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.MenuElement;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -47,7 +45,6 @@ import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicMenuUI;
 
-import com.sun.java.swing.SwingUtilities3;
 import com.sun.java.swing.plaf.windows.TMSchema.Part;
 import com.sun.java.swing.plaf.windows.TMSchema.State;
 
@@ -134,9 +131,6 @@ public class WindowsMenuUI extends BasicMenuUI {
         Object obj      = UIManager.get("MenuBar.rolloverEnabled");
         hotTrackingOn = (obj instanceof Boolean) ? (Boolean)obj : true;
     }
-
-
-
 
     @Override
     protected void paintMenuItem(Graphics g, JComponent c,
