@@ -460,7 +460,6 @@ public class MenuItemLayoutHelper {
     public boolean allocateIconTextGap;
     public int iconTextGap;
     public void allocateIconTextGap(int iconTextGap) {
-        System.out.println("******* allocateIconTextGap " + iconTextGap);
         allocateIconTextGap = true;
         this.iconTextGap = iconTextGap;
     }

@@ -882,6 +882,8 @@ public final class WindowsIconFactory implements Serializable
                 assert menuItem == null || c == menuItem;
                 Icon icon = getIcon();
 
+                boolean isCheckBulletAndIconPresent = WindowsMenuItemUI.isCheckBulletAndIconPresent(menuItem);
+
                 if (type == JCheckBoxMenuItem.class
                       || type == JRadioButtonMenuItem.class) {
                     AbstractButton b = (AbstractButton) c;
@@ -914,7 +916,7 @@ public final class WindowsIconFactory implements Serializable
                                 }
                             } else {
                                 if (icon == null) {
-                                    if (SwingUtilities3.isCheckBulletAndIconPresent()) {
+                                    if (isCheckBulletAndIconPresent) {
                                         skin.paintSkin(g, x + 4 * OFFSET, y + OFFSET, state);
                                     } else {
                                         skin.paintSkin(g, x + OFFSET, y + OFFSET, state);
@@ -955,8 +957,7 @@ public final class WindowsIconFactory implements Serializable
                     }
                 }
                 if (icon != null) {
-                    if (type == JCheckBoxMenuItem.class
-                            || type == JRadioButtonMenuItem.class || SwingUtilities3.isCheckBulletAndIconPresent()) {
+                    if (isCheckBulletAndIconPresent) {
                         if (WindowsGraphicsUtils.isLeftToRight(c)) {
                             icon.paintIcon(c, g,
                                     x + VistaMenuItemCheckIconFactory.getIconWidth(),

@@ -135,40 +135,7 @@ public class WindowsMenuUI extends BasicMenuUI {
         hotTrackingOn = (obj instanceof Boolean) ? (Boolean)obj : true;
     }
 
-    private static void scanMenuForCheckBulletAndIcon(Component c) {
-        if (c instanceof JMenu menu) {
-            Component[] children = menu.getMenuComponents();
 
-            for (int i = 0; i < children.length; i++) {
-                scanMenuForCheckBulletAndIcon(children[i]);
-            }
-        }
-
-        if (c instanceof JRadioButtonMenuItem item) {
-            if (item.getIcon() != null) {
-                SwingUtilities3.setCheckBulletAndIconInMenu(true);
-            }
-            SwingUtilities3.setCheckBulletInMenu(true);
-            return;
-        }
-
-        if (c instanceof JCheckBoxMenuItem item) {
-            if (item.getIcon() != null) {
-                SwingUtilities3.setCheckBulletAndIconInMenu(true);
-            }
-            SwingUtilities3.setCheckBulletInMenu(true);
-            return;
-        }
-
-//        if (c instanceof JMenuItem) {
-//            JMenuItem item = (JMenuItem) c;
-//
-//            if (item.getIcon() != null && SwingUtilities3.isCheckBulletPresent()) {
-//                SwingUtilities3.setCheckBulletAndIconInMenu(true);
-//            }
-//            return;
-//        }
-    }
 
 
     @Override
@@ -178,9 +145,6 @@ public class WindowsMenuUI extends BasicMenuUI {
                                  int defaultTextIconGap) {
         assert c == menuItem : "menuItem passed as 'c' must be the same";
         if (WindowsMenuItemUI.isVistaPainting()) {
-            if (c instanceof JMenu menu && menu.isTopLevelMenu()) {
-                scanMenuForCheckBulletAndIcon((JMenu)c);
-            }
             WindowsMenuItemUI.paintMenuItem(accessor, g, c,
                                             checkIcon, arrowIcon,
                                             background, foreground,

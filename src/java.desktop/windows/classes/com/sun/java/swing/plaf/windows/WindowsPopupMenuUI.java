@@ -222,8 +222,6 @@ public class WindowsPopupMenuUI extends BasicPopupMenuUI {
                     afterCheckIconGap = (Integer) afterCheckIconGapObject;
                 }
                 int gap = 2 * afterCheckIconGap;
-
-                SwingUtilities3.setGap(gap);
                 size.width += gap;
             }
         }
@@ -237,7 +235,6 @@ public class WindowsPopupMenuUI extends BasicPopupMenuUI {
                     child instanceof JCheckBoxMenuItem) {
                 JMenuItem item = (JMenuItem) child;
                 if (item.getIcon() != null) {
-                    SwingUtilities3.setCheckBulletAndIconInMenu(true);
                     return true;
                 }
             }

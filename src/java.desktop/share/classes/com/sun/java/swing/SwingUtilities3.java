@@ -157,29 +157,6 @@ public class SwingUtilities3 {
         }
     }
 
-    public static boolean isCheckBulletAndIconPresent;
-    public static boolean isCheckBulletPresent;
-    public static void setCheckBulletAndIconInMenu(boolean hasCheckBulletAndIcon) {
-        isCheckBulletAndIconPresent = hasCheckBulletAndIcon;
-    }
-    public static void setCheckBulletInMenu(boolean hasCheckBullet) {
-        isCheckBulletPresent = hasCheckBullet;
-    }
-    public static boolean isCheckBulletAndIconPresent() {
-        return isCheckBulletAndIconPresent;
-    }
-    public static boolean isCheckBulletPresent() {
-        return isCheckBulletPresent;
-    }
-
-    public static int extraGap;
-    public static void setGap(int gap) {
-        extraGap = gap;
-    }
-    public static int getGap() {
-        return extraGap;
-    }
-
     public static void paintCheckIcon(Graphics g, MenuItemLayoutHelper lh,
                                MenuItemLayoutHelper.LayoutResult lr,
                                Color holdc, Color foreground) {
