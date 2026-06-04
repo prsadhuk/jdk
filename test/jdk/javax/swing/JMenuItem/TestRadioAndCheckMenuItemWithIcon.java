@@ -56,31 +56,44 @@ import javax.swing.UIManager;
 public class TestRadioAndCheckMenuItemWithIcon {
 
     private static final String INSTRUCTIONS = """
-        A top level Menu will be shown.
+        A window is displayed which has 2 Menu on the menu bar.
+        One is "Menu" and another "Menu2".
 
-        Clicking on the Menu will show a
-        JRadioButtonMenuItem group with 3 radiobutton menuitems
-        and a JCheckBoxMenuItem group with 3 checkbox menuitems.
+        Clicking on the "Menu" will show a
+            JRadioButtonMenuItem group with 3 radiobutton menuitems
+            and a JCheckBoxMenuItem group with 3 checkbox menuitems.
 
-        First radiobutton menuitem is selected with imageicon of a red square.
-        Second radiobutton menuitem is unselected with imageicon.
-        Third radiobutton menuItem is unselected without imageicon.
+            First radiobutton menuitem is selected with image icon of a red square.
+            Second radiobutton menuitem is unselected with image icon.
+            Third radiobutton menuItem is unselected without image icon.
 
-        First checkbox menuitem is selected with imageicon.
-        Second checkbox menuitem is unselected with imageicon.
-        Third checkbox menuItem is unselected without imageicon.
+            First checkbox menuitem is selected with image icon.
+            Second checkbox menuitem is unselected with image icon.
+            Third checkbox menuItem is unselected without image icon.
 
-        Verify that for first JRadioButtonMenuItem with imageicon,
-        a bullet is shown alongside the imageicon and
-        for first JCheckBoxMenuItem with imageicon
-        a checkmark is shown alongside the imageicon.
+            Verify that for first JRadioButtonMenuItem with image icon,
+            a bullet is shown alongside the image icon and
+            for first JCheckBoxMenuItem with image icon
+            a checkmark is shown alongside the image icon.
 
-        Also, verify the JMenuItem "MenuItem2" red square imageicon location.
-        Red square icon location should be vertically aligned to other icons
-        in the menu and also text of all menuitems should be vertically aligned.
+            Also, verify the JMenuItem "MenuItem2" red square image icon location.
+            The red square images are not all the same size but
+            their left edges should  all be aligned.
 
-        If bullet and checkmark is shown,
-        and "MenuItem2" imageicon location is as described, test passes else fails.""";
+        Clicking on the "Menu2" will show
+            2 JMenuitems with only text
+            1 JMenuItem with an image icon
+            1 JCheckBoxMenuItem menuitem with selected check mark
+            1 JRadioButtonMenuItem with a radio bullet
+
+            The red square image, check mark and radio bullet
+            should all be rendered in the 1st column
+            and the menu text of all the menuitems should be aligned.
+
+
+        If bullet and checkmark is shown in "Menu"
+        and "MenuItem2" image icon location and
+        and "Menu2" rendering is as decribed, test passes else fails.""";
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -150,7 +163,22 @@ public class TestRadioAndCheckMenuItemWithIcon {
         topLevel.add(menuitem2);
 
         JMenuBar menuBar = new JMenuBar();
+        JMenu menu2 = new JMenu("Menu2");
+        JMenuItem menuItem1 = new JMenuItem("text-only menu item1");
+        JMenuItem menuItem2 = new JMenuItem("text-only menu item2");
+        JMenuItem menuItem3 = new JMenuItem("text-only menu item2", imageIcon1);
+        JCheckBoxMenuItem cbMenuItem = new JCheckBoxMenuItem("text-check menu item4");
+        cbMenuItem.setSelected(true);
+        JRadioButtonMenuItem radioMenuItem = new JRadioButtonMenuItem("text-radio menu item5");
+        radioMenuItem.setSelected(true);
+        menu2.add(menuItem1);
+        menu2.add(menuItem2);
+        menu2.add(menuItem3);
+        menu2.add(cbMenuItem);
+        menu2.add(radioMenuItem);
+
         menuBar.add(topLevel);
+        menuBar.add(menu2);
 
         frame.setJMenuBar(menuBar);
         frame.setSize(300, 300);
