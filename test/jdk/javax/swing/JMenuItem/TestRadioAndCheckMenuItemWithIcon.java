@@ -28,7 +28,6 @@
  *          JCheckboxMenuItem checkmark is shown if
  *          JRadioButtonMenuItem and JCheckboxMenuItem
  *          is rendered with ImageIcon in WindowsLookAndFeel
- * @requires (os.family == "windows")
  * @library /java/awt/regtesthelpers
  * @build PassFailJFrame
  * @run main/manual TestRadioAndCheckMenuItemWithIcon
@@ -55,13 +54,18 @@ import javax.swing.UIManager;
 
 public class TestRadioAndCheckMenuItemWithIcon {
 
-    private static final String INSTRUCTIONS = """
-        A window is displayed which has 2 Menu on the menu bar.
-        One is "Menu" and another "Menu2".
+    private static final String INSTRUCTIONS1 = """
+        A window is displayed which has a "Menu" on the menu bar.""";
 
-        Clicking on the "Menu" will show a
+    private static final String INSTRUCTIONS2 = """
+        A window is displayed which has 2 Menu on the menu bar.
+        One is "Menu" and another "Menu2".""";
+
+    private static final String INSTRUCTIONS3 = """
+        \nClicking on the "Menu" will show a
             JRadioButtonMenuItem group with 3 radiobutton menuitems
-            and a JCheckBoxMenuItem group with 3 checkbox menuitems.
+            and a JCheckBoxMenuItem group with 3 checkbox menuitems
+            and 2 JMenuItems.
 
             First radiobutton menuitem is selected with image icon of a red square.
             Second radiobutton menuitem is unselected with image icon.
@@ -80,7 +84,11 @@ public class TestRadioAndCheckMenuItemWithIcon {
             The red square images are not all the same size but
             their left edges should  all be aligned.
 
-        Clicking on the "Menu2" will show
+        If bullet and checkmark is shown in "Menu"
+        and "MenuItem2" image icon location is aligned, test passes else fails.""";
+
+    private static final String INSTRUCTIONS4 = """
+        \nClicking on the "Menu2" will show
             2 JMenuitems with only text
             1 JMenuItem with an image icon
             1 JCheckBoxMenuItem menuitem with selected check mark
@@ -96,11 +104,24 @@ public class TestRadioAndCheckMenuItemWithIcon {
         and "Menu2" rendering is as decribed, test passes else fails.""";
 
     public static void main(String[] args) throws Exception {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        if ((UIManager.getLookAndFeel().getID()).equals("Aqua")) {
+            return;
+        }
+
+        String INSTRUCTIONS = null;
+        int colWidth = 0;
+        System.out.println(UIManager.getLookAndFeel().getName());
+        if ((UIManager.getLookAndFeel().getName()).equals("Windows")) {
+            INSTRUCTIONS = INSTRUCTIONS2 + INSTRUCTIONS3 + INSTRUCTIONS4;
+            colWidth = 75;
+        } else {
+            INSTRUCTIONS = INSTRUCTIONS1 + INSTRUCTIONS3;
+            colWidth = 45;
+        }
         PassFailJFrame.builder()
                 .title("JRadioButtonMenuItem Instructions")
                 .instructions(INSTRUCTIONS)
-                .columns(75)
+                .columns(colWidth)
                 .testUI(TestRadioAndCheckMenuItemWithIcon::doTest)
                 .build()
                 .awaitAndCheck();
@@ -163,22 +184,23 @@ public class TestRadioAndCheckMenuItemWithIcon {
         topLevel.add(menuitem2);
 
         JMenuBar menuBar = new JMenuBar();
-        JMenu menu2 = new JMenu("Menu2");
-        JMenuItem menuItem1 = new JMenuItem("text-only menu item1");
-        JMenuItem menuItem2 = new JMenuItem("text-only menu item2");
-        JMenuItem menuItem3 = new JMenuItem("text-only menu item2", imageIcon1);
-        JCheckBoxMenuItem cbMenuItem = new JCheckBoxMenuItem("text-check menu item4");
-        cbMenuItem.setSelected(true);
-        JRadioButtonMenuItem radioMenuItem = new JRadioButtonMenuItem("text-radio menu item5");
-        radioMenuItem.setSelected(true);
-        menu2.add(menuItem1);
-        menu2.add(menuItem2);
-        menu2.add(menuItem3);
-        menu2.add(cbMenuItem);
-        menu2.add(radioMenuItem);
-
         menuBar.add(topLevel);
-        menuBar.add(menu2);
+        if ((UIManager.getLookAndFeel().getName()).equals("Windows")) {
+            JMenu menu2 = new JMenu("Menu2");
+            JMenuItem menuItem1 = new JMenuItem("text-only menu item1");
+            JMenuItem menuItem2 = new JMenuItem("text-only menu item2");
+            JMenuItem menuItem3 = new JMenuItem("text-only menu item2", imageIcon1);
+            JCheckBoxMenuItem cbMenuItem = new JCheckBoxMenuItem("text-check menu item4");
+            cbMenuItem.setSelected(true);
+            JRadioButtonMenuItem radioMenuItem = new JRadioButtonMenuItem("text-radio menu item5");
+            radioMenuItem.setSelected(true);
+            menu2.add(menuItem1);
+            menu2.add(menuItem2);
+            menu2.add(menuItem3);
+            menu2.add(cbMenuItem);
+            menu2.add(radioMenuItem);
+            menuBar.add(menu2);
+        }
 
         frame.setJMenuBar(menuBar);
         frame.setSize(300, 300);
