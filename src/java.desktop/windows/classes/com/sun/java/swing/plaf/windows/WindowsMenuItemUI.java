@@ -175,11 +175,7 @@ public class WindowsMenuItemUI extends BasicMenuItemUI {
 
         if (c instanceof JRadioButtonMenuItem || c instanceof JCheckBoxMenuItem || c instanceof JMenuItem) {
             if (isCheckBulletAndIconPresent((JMenuItem) c)) {
-                int afterCheckIconGap = 0;
-                Object afterCheckIconGapObject = UIManager.get(getPropertyPrefix() + ".afterCheckIconGap");
-                if (afterCheckIconGapObject instanceof Integer) {
-                    afterCheckIconGap = (Integer) afterCheckIconGapObject;
-                }
+                int afterCheckIconGap = UIManager.getInt(getPropertyPrefix() + ".afterCheckIconGap");
                 textGap = 2 * afterCheckIconGap;
                 size.width += textGap;
             }
@@ -191,9 +187,10 @@ public class WindowsMenuItemUI extends BasicMenuItemUI {
     public static class MenuScanResult {
         boolean checkBulletPresent;
         boolean iconPresent;
-        JMenu menu;
 
-        public MenuScanResult() {}
+        public MenuScanResult(JMenu menu) {
+            scanMenuForCheckBulletAndIcon(menu);
+        }
 
         boolean checkBulletAndIconPresent() {
             return checkBulletPresent && iconPresent;
@@ -248,6 +245,7 @@ public class WindowsMenuItemUI extends BasicMenuItemUI {
         }
         return null;
     }
+
     static final String CHECK_BULLET_AND_ICON_PRESENT =
             "WindowsMenuItemUI.checkBulletAndIconPresent";
 
@@ -286,17 +284,15 @@ public class WindowsMenuItemUI extends BasicMenuItemUI {
                 acceleratorFont, MenuItemLayoutHelper.useCheckAndArrow(menuItem),
                 prefix);
         if (c instanceof JMenu menu && menu.isTopLevelMenu()) {
-            MenuScanResult scan = new MenuScanResult();
-            scan.scanMenuForCheckBulletAndIcon(menu);
+            MenuScanResult scan = new MenuScanResult(menu);
 
             menu.putClientProperty(
                     CHECK_BULLET_AND_ICON_PRESENT,
                     Boolean.valueOf(scan.checkBulletAndIconPresent()));
+
         }
-        if (mi instanceof JRadioButtonMenuItem || mi instanceof JCheckBoxMenuItem || mi instanceof JMenuItem) {
-            if (isCheckBulletAndIconPresent(mi)) {
-                lh.allocateIconTextGap(textGap);
-            }
+        if (isCheckBulletAndIconPresent(mi)) {
+            lh.allocateIconTextGap(textGap);
         }
         MenuItemLayoutHelper.LayoutResult lr = lh.layoutMenuItem();
 

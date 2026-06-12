@@ -585,7 +585,7 @@ public class MenuItemLayoutHelper {
             lr.iconRect.x += afterCheckIconGap - gap;
             lr.textRect.x += afterCheckIconGap - gap;
             if (allocateIconTextGap) {
-                lr.textRect.x += iconTextGap;
+                lr.textRect.x += iconTextGap - gap;
             }
         }
 

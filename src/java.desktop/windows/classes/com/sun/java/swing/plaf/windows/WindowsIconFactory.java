@@ -907,7 +907,9 @@ public final class WindowsIconFactory implements Serializable
                         }
                         XPStyle xp = XPStyle.getXP();
                         if (xp != null) {
-                            Skin skin = xp.getSkin(c, part);
+                            Skin skin =  xp.getSkin(c, backgroundPart);
+                            skin.paintSkin(g, x, y, backgroundState);
+                            skin = xp.getSkin(c, part);
                             if (WindowsGraphicsUtils.isLeftToRight(c)) {
                                 if (icon == null || icon.getIconHeight() <= 16) {
                                     skin.paintSkin(g, x + OFFSET, y + OFFSET, state);

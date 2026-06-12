@@ -30,10 +30,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Window;
-import javax.swing.*;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JRootPane;
 import javax.swing.MenuElement;
 import javax.swing.MenuSelectionManager;
@@ -213,14 +216,9 @@ public class WindowsPopupMenuUI extends BasicPopupMenuUI {
         }
 
         if (size != null) {
-            size = new Dimension(size);
 
             if (hasCheckBulletAndIconPresent((JPopupMenu) c)) {
-                int afterCheckIconGap = 0;
-                Object afterCheckIconGapObject = UIManager.get("MenuItem" + ".afterCheckIconGap");
-                if (afterCheckIconGapObject instanceof Integer) {
-                    afterCheckIconGap = (Integer) afterCheckIconGapObject;
-                }
+                int afterCheckIconGap = UIManager.getInt("MenuItem" + ".afterCheckIconGap");
                 int gap = 2 * afterCheckIconGap;
                 size.width += gap;
             }

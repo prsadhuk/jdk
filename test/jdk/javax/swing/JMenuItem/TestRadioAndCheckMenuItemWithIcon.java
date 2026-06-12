@@ -55,6 +55,8 @@ import javax.swing.UIManager;
 public class TestRadioAndCheckMenuItemWithIcon {
 
     private static final String INSTRUCTIONS1 = """
+        This test, although can be run in any L&F, is primarily for
+        WindowsLookAndFeel.
         A window is displayed which has a "Menu" on the menu bar.""";
 
     private static final String INSTRUCTIONS2 = """
@@ -101,26 +103,26 @@ public class TestRadioAndCheckMenuItemWithIcon {
 
         If bullet and checkmark is shown in "Menu"
         and "MenuItem2" image icon location and
-        and "Menu2" rendering is as decribed, test passes else fails.""";
+        and "Menu2" rendering is as described, test passes else fails.""";
 
     public static void main(String[] args) throws Exception {
         if ((UIManager.getLookAndFeel().getID()).equals("Aqua")) {
             return;
         }
 
-        String INSTRUCTIONS = null;
-        int colWidth = 0;
         System.out.println(UIManager.getLookAndFeel().getName());
+        String instructions = null;
+        int colWidth = 0;
         if ((UIManager.getLookAndFeel().getName()).equals("Windows")) {
-            INSTRUCTIONS = INSTRUCTIONS2 + INSTRUCTIONS3 + INSTRUCTIONS4;
+            instructions = INSTRUCTIONS2 + INSTRUCTIONS3 + INSTRUCTIONS4;
             colWidth = 75;
         } else {
-            INSTRUCTIONS = INSTRUCTIONS1 + INSTRUCTIONS3;
+            instructions = INSTRUCTIONS1 + INSTRUCTIONS3;
             colWidth = 45;
         }
         PassFailJFrame.builder()
                 .title("JRadioButtonMenuItem Instructions")
-                .instructions(INSTRUCTIONS)
+                .instructions(instructions)
                 .columns(colWidth)
                 .testUI(TestRadioAndCheckMenuItemWithIcon::doTest)
                 .build()
