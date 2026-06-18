@@ -203,13 +203,15 @@ class DTD implements DTDConstants {
      *   <code>name</code>, which may be newly created
      */
     public Element getElement(String name) {
-        Element e = elementHash.get(name);
-        if (e == null) {
-            e = new Element(name, elements.size());
-            elements.addElement(e);
-            elementHash.put(name, e);
+        synchronized (elementHash) {
+            Element e = elementHash.get(name);
+            if (e == null) {
+                e = new Element(name, elements.size());
+                elements.addElement(e);
+                elementHash.put(name, e);
+            }
+            return e;
         }
-        return e;
     }
 
     /**
