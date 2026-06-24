@@ -202,16 +202,15 @@ class DTD implements DTDConstants {
      * @return the <code>Element</code> corresponding to
      *   <code>name</code>, which may be newly created
      */
-    public Element getElement(String name) {
-        synchronized (elementHash) {
-            Element e = elementHash.get(name);
-            if (e == null) {
-                e = new Element(name, elements.size());
-                elements.addElement(e);
-                elementHash.put(name, e);
-            }
-            return e;
+    public synchronized Element getElement(String name) {
+        Element e = elementHash.get(name);
+        if (e == null) {
+            e = new Element(name, elements.size());
+            elements.addElement(e);
+            elementHash.put(name, e);
         }
+        return e;
+
     }
 
     /**
@@ -221,7 +220,7 @@ class DTD implements DTDConstants {
      * @return the <code>Element</code> corresponding to
      *   <code>index</code>
      */
-    public Element getElement(int index) {
+    public synchronized Element getElement(int index) {
         return elements.elementAt(index);
     }
 
@@ -237,7 +236,7 @@ class DTD implements DTDConstants {
      * @return the <code>Entity</code> requested or a new <code>Entity</code>
      *   if not found
      */
-    public Entity defineEntity(String name, int type, char[] data) {
+    public synchronized Entity defineEntity(String name, int type, char[] data) {
         Entity ent = entityHash.get(name);
         if (ent == null) {
             ent = new Entity(name, type, data);
