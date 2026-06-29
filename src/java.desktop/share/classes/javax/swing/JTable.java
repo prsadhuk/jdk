@@ -1264,12 +1264,6 @@ public class JTable extends JComponent implements TableModelListener, Scrollable
             autoResizeMode = mode;
             resizeAndRepaint();
             if (tableHeader != null) {
-                if (mode == JTable.AUTO_RESIZE_LAST_COLUMN) {
-                    int colCnt = columnModel.getColumnCount();
-                    if (colCnt > 0) {
-                        tableHeader.setResizingColumn(columnModel.getColumn(colCnt - 1));
-                    }
-                }
                 tableHeader.resizeAndRepaint();
             }
             firePropertyChange("autoResizeMode", old, autoResizeMode);
@@ -3195,19 +3189,7 @@ public class JTable extends JComponent implements TableModelListener, Scrollable
     public void doLayout() {
         boolean prefWidthSet = false;
         TableColumn resizingColumn = getResizingColumn();
-        // doLayout is called for both pack and show
-        // so if initial preferred width is set by user then
-        // it needs to be honoured even if resizingColumn
-        // is set to last column on account of
-        // AUTO_RESIZE_LAST_COLUMN autoResizeMode
-        for (int i = 0; i < columnModel.getColumnCount(); i++) {
-            if (columnModel.getColumn(i).getPreferredWidth() != 75
-                    && columnModel.getColumn(i).getWidth() == 75) {
-                prefWidthSet = true;
-                break;
-            }
-        }
-        if (resizingColumn == null || prefWidthSet) {
+        if (resizingColumn == null) {
             setWidthsFromPreferredWidths(false);
         }
         else {
@@ -3294,7 +3276,57 @@ public class JTable extends JComponent implements TableModelListener, Scrollable
         }
     }
 
+    private boolean isInitialPreferredWidthLayout() {
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            if (column.getPreferredWidth() != 75 && column.getWidth() == 75) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void accommodateLastColumnOnly() {
+        int columnCount = getColumnCount();
+        if (columnCount == 0) {
+            return;
+        }
+
+        int delta = getWidth() - getColumnModel().getTotalColumnWidth();
+        if (delta != 0) {
+            accommodateDelta(columnCount - 1, delta);
+        }
+    }
+
+    private void setWidthsFromPreferredWidthsLastColumnOnly() {
+        int columnCount = getColumnCount();
+        if (columnCount == 0) {
+            return;
+        }
+
+        int totalWidth = getWidth();
+        int total = 0;
+
+        for (int i = 0; i < columnCount - 1; i++) {
+            TableColumn column = columnModel.getColumn(i);
+            int width = column.getPreferredWidth();
+            column.setWidth(width);
+            total += width;
+        }
+
+        TableColumn lastColumn = columnModel.getColumn(columnCount - 1);
+        lastColumn.setWidth(totalWidth - total);
+    }
+
     private void setWidthsFromPreferredWidths(final boolean inverse) {
+        if (!inverse && autoResizeMode == AUTO_RESIZE_LAST_COLUMN) {
+            if (isInitialPreferredWidthLayout()) {
+                setWidthsFromPreferredWidthsLastColumnOnly();
+            } else {
+                accommodateLastColumnOnly();
+            }
+            return;
+        }
         int totalWidth     = getWidth();
         int totalPreferred = getPreferredSize().width;
         int target = !inverse ? totalWidth : totalPreferred;
