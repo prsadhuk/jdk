@@ -26,6 +26,7 @@
 package com.apple.laf;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.beans.*;
@@ -186,25 +187,47 @@ public final class AquaProgressBarUI extends ProgressBarUI implements ChangeList
         return Double.isNaN(value) ? 0 : value;
     }
 
-    protected void paint(final Graphics g) {
+    private void paintProgressBar(Graphics2D g2) {
         // this is questionable. We may want the insets to mean something different.
         final Insets i = progressBar.getInsets();
         final int width = progressBar.getWidth() - (i.right + i.left);
         final int height = progressBar.getHeight() - (i.bottom + i.top);
 
-        Graphics2D g2 = (Graphics2D) g;
         final AffineTransform savedAT = g2.getTransform();
-        if (!progressBar.getComponentOrientation().isLeftToRight()) {
-            //Scale operation: Flips component about pivot
-            //Translate operation: Moves component back into original position
-            g2.scale(-1, 1);
-            g2.translate(-progressBar.getWidth(), 0);
+        try {
+            if (!progressBar.getComponentOrientation().isLeftToRight()) {
+                //Scale operation: Flips component about pivot
+                //Translate operation: Moves component back into original position
+                g2.scale(-1, 1);
+                g2.translate(-progressBar.getWidth(), 0);
+            }
+            painter.paint(g2, progressBar, i.left, i.top, width, height);
+            if (progressBar.isStringPainted() && !progressBar.isIndeterminate()) {
+                paintString(g2, i.left, i.top, width, height);
+            }
+        } finally {
+            g2.setTransform(savedAT);
         }
-        painter.paint(g, progressBar, i.left, i.top, width, height);
+    }
 
-        g2.setTransform(savedAT);
-        if (progressBar.isStringPainted() && !progressBar.isIndeterminate()) {
-                paintString(g, i.left, i.top, width, height);
+    protected void paint(final Graphics g) {
+
+        if (g instanceof Graphics2D g2d) {
+            paintProgressBar(g2d);
+        } else {
+            int w = progressBar.getWidth();
+            int h = progressBar.getHeight();
+            BufferedImage image = new BufferedImage(w, h,
+                                                    BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2 = image.createGraphics();
+            try {
+                g2.setColor(progressBar.getBackground());
+                g2.fillRect(0, 0, w, h);
+                paintProgressBar(g2);
+            } finally {
+                g2.dispose();
+            }
+            g.drawImage(image, 0, 0, w, h, null);
         }
     }
 

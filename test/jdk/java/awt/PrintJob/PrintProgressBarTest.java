@@ -23,7 +23,7 @@
 
 /*
  * @test
- * @bug 6328248
+ * @bug 6328248 8386573
  * @summary JProgessBar should be printed on paper with PrintJob
  * @key printer
  * @library /java/awt/regtesthelpers
