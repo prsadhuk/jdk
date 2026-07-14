@@ -39,9 +39,9 @@ public final class WindowsFlags {
      * has forced it on with d3d=true.  These associated variables have
      * the same base (eg, d3d) but end in "Set" (eg, d3dEnabled and
      * d3dSet).
-     *      ddEnabled: usage: "-Dsun.java2d.d3d[=true|false]"
+     *      ddEnabled: usage: "-Dsun.java2d.noddraw[=false|true]"
      *               turns on/off all usage of Direct3D
-     *      ddOffscreenEnabled: equivalent of sun.java2d.d3d
+     *      ddOffscreenEnabled: equivalent of sun.java2d.noddraw
      *      gdiBlitEnabled: usage: "-Dsun.java2d.gdiblit=false"
      *               turns off Blit loops that use GDI for copying to
      *               the screen from certain image types.  Copies will,
@@ -169,7 +169,7 @@ public final class WindowsFlags {
         magPresent = getBooleanProp(
                 "javax.accessibility.screen_magnifier_present", false);
         boolean ddEnabled =
-                getBooleanProp("sun.java2d.d3d", magPresent);
+                !getBooleanProp("sun.java2d.noddraw", magPresent);
         boolean ddOffscreenEnabled =
                 getBooleanProp("sun.java2d.ddoffscreen", ddEnabled);
         d3dEnabled = getBooleanProp("sun.java2d.d3d",
