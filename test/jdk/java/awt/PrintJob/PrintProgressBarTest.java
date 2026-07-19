@@ -82,6 +82,7 @@ public class PrintProgressBarTest {
                 if (pj != null) {
                     try {
                         Graphics g = pj.getGraphics();
+                        g.translate(20, 20);
                         panel.printAll(g);
                         g.dispose();
                         pj.end();

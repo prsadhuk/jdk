@@ -187,11 +187,8 @@ public final class AquaProgressBarUI extends ProgressBarUI implements ChangeList
         return Double.isNaN(value) ? 0 : value;
     }
 
-    private void paintProgressBar(Graphics2D g2) {
+    private void paintProgressBar(Graphics2D g2, Insets i, int width, int height) {
         // this is questionable. We may want the insets to mean something different.
-        final Insets i = progressBar.getInsets();
-        final int width = progressBar.getWidth() - (i.right + i.left);
-        final int height = progressBar.getHeight() - (i.bottom + i.top);
 
         final AffineTransform savedAT = g2.getTransform();
         try {
@@ -202,32 +199,38 @@ public final class AquaProgressBarUI extends ProgressBarUI implements ChangeList
                 g2.translate(-progressBar.getWidth(), 0);
             }
             painter.paint(g2, progressBar, i.left, i.top, width, height);
-            if (progressBar.isStringPainted() && !progressBar.isIndeterminate()) {
-                paintString(g2, i.left, i.top, width, height);
-            }
         } finally {
             g2.setTransform(savedAT);
         }
     }
 
     protected void paint(final Graphics g) {
+        final Insets i = progressBar.getInsets();
+        final int width = progressBar.getWidth() - (i.right + i.left);
+        final int height = progressBar.getHeight() - (i.bottom + i.top);
 
-        if (g instanceof Graphics2D g2d) {
-            paintProgressBar(g2d);
-        } else {
-            int w = progressBar.getWidth();
-            int h = progressBar.getHeight();
-            BufferedImage image = new BufferedImage(w, h,
-                                                    BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2 = image.createGraphics();
-            try {
-                g2.setColor(progressBar.getBackground());
-                g2.fillRect(0, 0, w, h);
-                paintProgressBar(g2);
-            } finally {
-                g2.dispose();
+        Graphics2D g2d = null;
+        if (g instanceof Graphics2D) {
+            g2d = (Graphics2D)g;
+            paintProgressBar(g2d, i, width, height);
+            if (progressBar.isStringPainted() && !progressBar.isIndeterminate()) {
+                paintString(g2d, i.left, i.top, width, height);
             }
-            g.drawImage(image, 0, 0, w, h, null);
+        } else {
+            BufferedImage image = new BufferedImage(width, height,
+                                                    BufferedImage.TYPE_INT_RGB);
+            g2d = image.createGraphics();
+            try {
+                g2d.setColor(progressBar.getBackground());
+                g2d.fillRect(0, 0, width, height);
+                paintProgressBar(g2d, i, width, height);
+                if (progressBar.isStringPainted() && !progressBar.isIndeterminate()) {
+                    paintString(g2d, i.left, i.top, width, height);
+                }
+            } finally {
+                g2d.dispose();
+            }
+            g.drawImage(image, 0, 0, width, height, null);
         }
     }
 
@@ -238,6 +241,7 @@ public final class AquaProgressBarUI extends ProgressBarUI implements ChangeList
     }
 
     protected void paintString(final Graphics g, final int x, final int y, final int width, final int height) {
+System.out.println(g instanceof Graphics2D);
         if (!(g instanceof Graphics2D)) return;
 
         final Graphics2D g2 = (Graphics2D)g;
