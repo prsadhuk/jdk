@@ -241,7 +241,6 @@ public final class AquaProgressBarUI extends ProgressBarUI implements ChangeList
     }
 
     protected void paintString(final Graphics g, final int x, final int y, final int width, final int height) {
-System.out.println(g instanceof Graphics2D);
         if (!(g instanceof Graphics2D)) return;
 
         final Graphics2D g2 = (Graphics2D)g;
