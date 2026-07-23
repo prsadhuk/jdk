@@ -123,7 +123,7 @@ public class bug8069348 {
     private static boolean isSupported() {
         String d3d = System.getProperty("sun.java2d.d3d");
         System.out.println("d3d " + d3d);
-        return !Boolean.getBoolean(d3d) || getOSType() == OSType.WINDOWS;
+        return !Boolean.parseBoolean(d3d) || getOSType() == OSType.WINDOWS;
     }
 
     private static Rectangle getInternalFrameScreenBounds() throws Exception {
